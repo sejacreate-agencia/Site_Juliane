@@ -1,0 +1,1 @@
+# Pasta para imagens, vídeos e criativos
