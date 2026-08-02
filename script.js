@@ -78,17 +78,18 @@ document.querySelectorAll('.js-anos').forEach(el => {
 function animateCounter(el) {
   const raw = el.textContent.trim();
   const num = parseInt(raw.replace(/\D/g, ''), 10);
-  const suffix = raw.replace(/[\d]/g, '');
   if (!num) return;
+  // Preserva "+" e "%" e formata milhares no padrão pt-BR (30.000)
+  const prefixo = raw.startsWith('+') ? '+' : '';
+  const sufixo  = raw.endsWith('%') ? '%' : '';
+  const formatar = (n) => n.toLocaleString('pt-BR');
   let start = null;
   const duration = 1800;
   const step = (timestamp) => {
     if (!start) start = timestamp;
     const progress = Math.min((timestamp - start) / duration, 1);
     const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = suffix.startsWith('+')
-      ? `+${Math.floor(ease * num)}`
-      : `${Math.floor(ease * num)}${suffix}`;
+    el.textContent = `${prefixo}${formatar(Math.floor(ease * num))}${sufixo}`;
     if (progress < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
