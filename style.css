@@ -255,23 +255,32 @@ ul { list-style: none; }
   background: var(--brown-dark);
 }
 .hero__bg {
+  /* Foto ancorada à direita: o texto fica sobre o fundo, nunca sobre o rosto */
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  width: 66%;
+  min-width: 420px;
+  /* Borda esquerda esfumaçada para fundir a foto com o fundo escuro */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 14%, #000 34%);
+          mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.55) 14%, #000 34%);
 }
 .hero__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 85% top;
+  object-position: 58% top;
 }
 .hero__overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(58, 42, 34, 0.75) 0%,
-    rgba(74, 63, 53, 0.55) 50%,
-    rgba(58, 42, 34, 0.40) 100%
+    rgba(58, 42, 34, 0.78) 0%,
+    rgba(74, 63, 53, 0.52) 50%,
+    rgba(58, 42, 34, 0.28) 100%
   );
 }
 .hero__content {
@@ -419,13 +428,17 @@ ul { list-style: none; }
   gap: 28px;
 }
 .servico-card {
-  background: var(--white);
+  /* Bege rosado da paleta (nude sobre off-white) para destacar do fundo */
+  background: linear-gradient(160deg, #F3E4D8 0%, #E8D3C4 100%);
   border-radius: var(--radius-lg);
   padding: 40px 32px;
   position: relative;
-  border: 1px solid rgba(196, 165, 116, 0.15);
+  border: 1px solid rgba(184, 143, 116, 0.45);
   transition: transform 0.3s, box-shadow 0.3s;
 }
+/* Texto um pouco mais escuro para contraste sobre o bege */
+.servico-card .servico-card__desc,
+.servico-card .servico-card__list li { color: #5C534C; }
 .servico-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
@@ -434,7 +447,8 @@ ul { list-style: none; }
   background: var(--brown-dark);
   border-color: transparent;
 }
-.servico-card--featured .servico-card__num { color: rgba(255,255,255,0.2); }
+.servico-card--featured .servico-card__num { color: rgba(212, 181, 160, 0.45); }
+.servico-card--featured:hover .servico-card__num { color: rgba(212, 181, 160, 0.7); }
 .servico-card--featured .servico-card__icon { color: var(--nude); }
 .servico-card--featured .servico-card__title { color: var(--white); }
 .servico-card--featured .servico-card__desc { color: rgba(255,255,255,0.65); }
@@ -459,10 +473,12 @@ ul { list-style: none; }
   font-family: var(--font-serif);
   font-size: 3.5rem;
   font-weight: 400;
-  color: var(--gray-light);
+  color: rgba(160, 121, 74, 0.6); /* gold escuro translúcido sobre o bege */
   line-height: 1;
   margin-bottom: 16px;
+  transition: color 0.3s;
 }
+.servico-card:hover .servico-card__num { color: rgba(160, 121, 74, 0.9); }
 .servico-card__icon {
   color: var(--gold);
   margin-bottom: 20px;
@@ -1051,6 +1067,9 @@ ul { list-style: none; }
 @media (max-width: 1024px) {
   :root { --section-py: 72px; }
 
+  .hero__bg { width: 78%; }
+  .hero__img { object-position: 55% top; }
+
   .sobre__grid { grid-template-columns: 1fr; gap: 48px; }
   .sobre__visual { max-width: 480px; margin: 0 auto; }
   .sobre__badge { right: 0; }
@@ -1102,6 +1121,23 @@ ul { list-style: none; }
     font-size: 1rem;
     border-bottom: 1px solid var(--gray-light);
   }
+
+  .hero__bg {
+    /* No mobile a foto volta a ocupar a tela toda, com o rosto no topo */
+    width: 100%;
+    min-width: 0;
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+  .hero__img { object-position: 50% top; }
+
+  /* Título não pode estourar a largura da tela */
+  .hero__headline { font-size: clamp(2rem, 9.5vw, 2.8rem); }
+  .hero__eyebrow { font-size: 0.68rem; letter-spacing: 0.14em; }
+
+  /* Logo e menu ficam legíveis sobre as áreas claras da foto */
+  .nav:not(.scrolled) .nav__logo,
+  .nav:not(.scrolled) .nav__hamburger span { filter: drop-shadow(0 1px 3px rgba(58,42,34,0.55)); }
 
   .hero__content {
     padding: calc(var(--nav-h) + 32px) 20px 60px;

@@ -67,6 +67,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
+// Anos de experiência: calculados a partir do ano de fundação (data-since)
+document.querySelectorAll('.js-anos').forEach(el => {
+  const desde = parseInt(el.dataset.since, 10);
+  if (!desde) return;
+  el.textContent = `+${new Date().getFullYear() - desde}`;
+});
+
 // Counter animation — triggered after fade-in completes
 function animateCounter(el) {
   const raw = el.textContent.trim();
@@ -87,13 +94,19 @@ function animateCounter(el) {
   requestAnimationFrame(step);
 }
 
-const statsEl = document.querySelector('.stats');
-if (statsEl) {
+// Dispara os contadores quando o bloco entra em tela
+function contarQuandoVisivel(container, seletor) {
+  if (!container) return;
+  const rodar = () => container.querySelectorAll(seletor).forEach(animateCounter);
+  if (container.classList.contains('visible')) return rodar();
   const mo = new MutationObserver(() => {
-    if (statsEl.classList.contains('visible')) {
-      statsEl.querySelectorAll('.stat__num').forEach(animateCounter);
+    if (container.classList.contains('visible')) {
+      rodar();
       mo.disconnect();
     }
   });
-  mo.observe(statsEl, { attributes: true, attributeFilter: ['class'] });
+  mo.observe(container, { attributes: true, attributeFilter: ['class'] });
 }
+
+contarQuandoVisivel(document.querySelector('.stats'), '.stat__num');
+contarQuandoVisivel(document.querySelector('.sobre__visual'), '.sobre__badge-num');
